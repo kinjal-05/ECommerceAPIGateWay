@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8079
 
 spring:
   application:
@@ -87,6 +87,10 @@ spring:
                 redis-rate-limiter.requestedTokens: 1
                 key-resolver: "#{@userKeyResolver}"
 
+jwt:
+  secret: ChangeThisSecretKeyToAtLeast32CharactersLong!!
+  expiration-ms: 3600000
+
 eureka:
   client:
     service-url:
@@ -96,10 +100,12 @@ eureka:
   instance:
     prefer-ip-address: true
 
-# ✅ logging is TOP-LEVEL — NOT inside spring:
 logging:
   level:
     org.springframework.cloud.gateway: DEBUG
-    org.springframework.data.redis: DEBUG
     org.springframework.cloud.gateway.filter: TRACE
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.data.redis: DEBUG
+    reactor.netty.http.client: DEBUG
     io.lettuce.core: DEBUG

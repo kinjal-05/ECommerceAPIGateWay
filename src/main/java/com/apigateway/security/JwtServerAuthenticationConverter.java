@@ -1,17 +1,16 @@
 package com.apigateway.security;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.web.server.ServerWebExchange;
-
 import reactor.core.publisher.Mono;
+
+@RequiredArgsConstructor
 public class JwtServerAuthenticationConverter implements ServerAuthenticationConverter {
 
 	private final JwtService jwtService;
-
-	public JwtServerAuthenticationConverter(JwtService jwtService) {
-		this.jwtService = jwtService;
-	}
 
 	@Override
 	public Mono<Authentication> convert(ServerWebExchange exchange) {

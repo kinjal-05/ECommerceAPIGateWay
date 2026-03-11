@@ -1,5 +1,6 @@
 package com.apigateway.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -9,17 +10,14 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
 
 	private final JwtService jwtService;
 
-	public SecurityConfig(JwtService jwtService) {
-		this.jwtService = jwtService;
-	}
-
 	@Bean
 	public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-		// Custom JWT filter
+
 		AuthenticationWebFilter jwtAuthFilter = new AuthenticationWebFilter(jwtReactiveAuthenticationManager());
 		jwtAuthFilter.setServerAuthenticationConverter(new JwtServerAuthenticationConverter(jwtService));
 
@@ -43,4 +41,5 @@ public class SecurityConfig {
 	public ReactiveAuthenticationManager jwtReactiveAuthenticationManager() {
 		return new JwtReactiveAuthenticationManager(jwtService);
 	}
+
 }

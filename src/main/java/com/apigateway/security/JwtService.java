@@ -1,26 +1,22 @@
 package com.apigateway.security;
+
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-
 import javax.crypto.SecretKey;
-
 import org.springframework.stereotype.Service;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+
 @Service
 public class JwtService {
 
-	// ✅ MUST BE SAME AS USER SERVICE
 	private final String secret = "ChangeThisSecretKeyToAtLeast32CharactersLong!!";
 
 	private SecretKey getSigningKey() {
-		// ✅ FIX: Use UTF-8 (NOT Base64)
 		return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 	}
 
-	// ✅ Validate Token
 	public boolean validateToken(String token) {
 		try {
 			System.out.println("Incoming Token: " + token);
@@ -33,20 +29,15 @@ public class JwtService {
 		}
 	}
 
-	// ✅ Extract Username
 	public String getUsernameFromToken(String token) {
 		return extractClaims(token).getSubject();
 	}
 
 	public List<String> getRolesFromToken(String token) {
 		Claims claims = extractClaims(token);
-
 		System.out.println("Claims: " + claims);
-
 		Object rolesObj = claims.get("roles");
-
 		System.out.println("Raw roles object: " + rolesObj);
-
 		if (rolesObj == null) {
 			System.out.println("No roles found in token ❌");
 			return List.of();
@@ -54,23 +45,17 @@ public class JwtService {
 
 		if (rolesObj instanceof List<?>) {
 			List<String> roles = ((List<?>) rolesObj).stream().map(Object::toString).toList();
-
 			System.out.println("Extracted Roles: " + roles);
-
 			return roles;
 		}
-
 		System.out.println("Roles format incorrect ❌");
 		return List.of();
 	}
 
 	public Long getUserIdFromToken(String token) {
 		Claims claims = extractClaims(token);
-
 		Object userIdObj = claims.get("userId");
-
 		System.out.println("Raw userId object: " + userIdObj);
-
 		if (userIdObj == null) {
 			System.out.println("No userId found in token ❌");
 			return null;
@@ -86,7 +71,6 @@ public class JwtService {
 		}
 	}
 
-	// ✅ Common method (avoid repetition)
 	private Claims extractClaims(String token) {
 		return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
 	}

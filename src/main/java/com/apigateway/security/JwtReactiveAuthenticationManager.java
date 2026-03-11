@@ -1,20 +1,19 @@
 package com.apigateway.security;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
 import reactor.core.publisher.Mono;
+
+@RequiredArgsConstructor
 public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationManager {
 
 	private final JwtService jwtService;
-
-	public JwtReactiveAuthenticationManager(JwtService jwtService) {
-		this.jwtService = jwtService;
-	}
 
 	@Override
 	public Mono<Authentication> authenticate(Authentication authentication) {
